@@ -1,6 +1,6 @@
 # latexwatch
 
-Watch a directory for .tex files and compile them to .pdf 
+Watch a directory for `.tex` files and compile them to `.pdf`
 
 # Installation
 
@@ -10,6 +10,12 @@ npm install -g latexwatch
 
 # Example Usage
 
+Current directory
+```sh
+latexwatch
+```
+
+Separate `.tex` and `.pdf` directory
 ```sh
 latexwatch --src ./docs --target ./build
 ```
