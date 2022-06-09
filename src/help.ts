@@ -4,11 +4,17 @@ export function printHelp() {
   console.log(commandLineUsage([
     {
       header: "latexwatch",
-      content: "Watch a directory for .tex files and compile them to .pdf"
+      content: "Map files from a watched directory to a target directory"
     },
     {
       header: 'Options',
       optionList: [
+        {
+          name: "command",
+          type: String,
+          description: "The command to execute -- use {0} and {1} as source and target files.",
+          defaultOption: true,
+        },
         {
           name: "src",
           typeLabel: '{underline directory}',

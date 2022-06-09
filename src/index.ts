@@ -3,15 +3,17 @@ import chokidar from "chokidar";
 import path from "path";
 import fs from "fs-extra";
 import { deleteStatus, updateStatus, setPdfDir, setTexDir } from "./status";
-import { compileLatex } from "./latex";
+import { executeCommand } from "./process";
 import { getConfig } from "./config";
 
-const { src, target } = getConfig();
+const { src, target, command } = getConfig();
 
 setTexDir(src);
 setPdfDir(target);
 
-const glob = path.join(src, "**", "*.tex");
+const ext = ".tex";
+
+const glob = path.join(src, "**", `*${ext}`);
 
 const watcher = chokidar.watch(glob);
 
@@ -28,7 +30,7 @@ function getPdfPath(texPath: string) {
 
 function onlyTex(fn: (texPath: string) => void) {
   return (filePath: string) => {
-    if (path.extname(filePath) !== ".tex") {
+    if (path.extname(filePath) !== ext) {
       return;
     }
     fn(filePath);
@@ -40,7 +42,7 @@ async function onUpdate(texPath: string) {
   const pdfPath = getPdfPath(texPath);
   fs.mkdirpSync(path.dirname(pdfPath));
   try {
-    await compileLatex(texPath, pdfPath);
+    await executeCommand(command, texPath, pdfPath);
     updateStatus(texPath, "OK", `${texPath} -> ${pdfPath}`);
   } catch (e) {
     const err = e as Error;
